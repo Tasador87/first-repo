@@ -1,58 +1,53 @@
-package MidExam10_03_2019;
+package Exercise;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class TheFinalQuest_03 {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        List<String> input = Arrays.stream(scanner.nextLine().split(" ")).collect(Collectors.toList());
+        String inputData = scanner.nextLine();
+        List<String> input = Arrays.stream(inputData.split("\\s+")).collect(Collectors.toList());
+        String commands = "";
 
-        String inputData = "";
+        while (!commands.equals("Stop")) {
+            String[] arrayOfcommands = commands.split("\\s+");
 
-        while (!"stop".equals(inputData = scanner.nextLine().toLowerCase())) {
-            String[] inputCommands = inputData.split("\\s+");
-            String command = inputCommands[0];
+            if (arrayOfcommands[0].equals("Delete")) {
+                int index = Integer.parseInt(arrayOfcommands[1]);
+                if (index >= -1 && index < input.size() - 1) {
+                    input.remove(index + 1);
+                }
+            } else if (arrayOfcommands[0].equals("Swap")) {
+                String word1 = arrayOfcommands[1];
+                String word2 = arrayOfcommands[2];
 
-            switch (command) {
-                case "delete":
-                    if (Integer.parseInt(inputCommands[1]) < input.size() - 1 && Integer.parseInt(inputCommands[1]) >= 0) {
-                        input.remove(Integer.parseInt(inputCommands[1]) + 1);
-                    }
-                    break;
-                case "swap":
-                    int newWord1 = 0;
-                    int newWord2 = 0;
-                    for (int i = 0; i < input.size(); i++) {
-                        if (input.get(i).equals(inputCommands[1])) {
-                            newWord1 = input.indexOf(input.get(i));
-                        }
-                    }
-                    for (int i = 0; i < input.size(); i++) {
-                        if (input.get(i).equals(inputCommands[2])) {
-                            newWord2 = input.indexOf(input.get(i));
-                        }
-                    }
-                    Collections.swap(input, newWord1, newWord2);
-                    break;
-                case "put":
-                    if (Integer.parseInt(inputCommands[2]) < input.size() && Integer.parseInt(inputCommands[2]) > 0) {
-                        input.add(Integer.parseInt(inputCommands[2]) - 1, inputCommands[1]);
-                    }
-                    break;
-                case "sort":
-                    Collections.sort(input);
-                    break;
-                case "replace":
-                    if (input.contains(inputCommands[2])) {
-                        Collections.replaceAll(input, inputCommands[2], inputCommands[1]);
-                    }
-                    break;
+                if (input.contains(word1) && input.contains(word2)) {
+                    Collections.swap(input, input.indexOf(word1), input.indexOf(word2));
+                }
+            } else if (arrayOfcommands[0].equals("Put")) {
+
+                String word = arrayOfcommands[1];
+                int index = Integer.parseInt(arrayOfcommands[2]);
+                if (index > 0 && index <= input.size() + 1) {
+                    input.add(index - 1, word);
+                }
+            } else if (arrayOfcommands[0].equals("Sort")) {
+                input.sort(Collections.reverseOrder());
+
+            } else if (arrayOfcommands[0].equals("Replace")) {
+                String word1 = arrayOfcommands[1];
+                String word2 = arrayOfcommands[2];
+                if (input.contains(word2)) {
+                    Collections.replaceAll(input, word2, word1);
+                }
             }
+            commands = scanner.nextLine();
         }
-        for (String strings : input) {
-            System.out.print(strings + " ");
+        for (String words : input) {
+            System.out.print(words + " ");
         }
     }
 }
